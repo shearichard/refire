@@ -7,18 +7,20 @@ import config from '../config';
 class App extends React.Component {
     //
     writeUserData = () => {
-      Firebase.database().ref('/').set(this.state);
-      console.log('DATA SAVED');
-    }
+        Firebase.database()
+            .ref("/")
+            .set(this.state);
+        console.log("DATA SAVED");
+    };
     //
     getUserData = () => {
-      let ref = Firebase.database().ref('/');
-      ref.on('value', snapshot => {
-        const state = snapshot.val();
-        this.setState(state);
-      });
-      console.log('DATA RETRIEVED');
-    }
+        let ref = Firebase.database().ref("/");
+        ref.on("value", snapshot => {
+            const state = snapshot.val();
+            this.setState(state);
+        });
+        console.log('DATA RETRIEVED');
+    };
     //  
     constructor(props){
         super(props);
@@ -43,21 +45,7 @@ class App extends React.Component {
             this.writeUserData();
         }
     }
-    writeUserData = () => {
-        Firebase.database()
-            .ref("/")
-            .set(this.state);
-        console.log("DATA SAVED");
-    };
-
-    getUserData = () => {
-        let ref = Firebase.database().ref("/");
-        ref.on("value", snapshot => {
-            const state = snapshot.val();
-            this.setState(state);
-        });
-    };
-    
+    //  
     handleSubmit = event => {
         event.preventDefault();
         let name = this.refs.name.value;
@@ -83,7 +71,7 @@ class App extends React.Component {
         this.refs.role.value = "";
         this.refs.uid.value = "";
     };
-
+    //
     removeData = developer => {
         const { developers } = this.state;
         const newState = developers.filter(data => {
@@ -91,13 +79,13 @@ class App extends React.Component {
         });
         this.setState({ developers: newState });
     };
-
+    //
     updateData = developer => {
         this.refs.uid.value = developer.uid;
         this.refs.name.value = developer.name;
         this.refs.role.value = developer.role;
     };
-
+    //
     render() {
         const { developers } = this.state;
         //
