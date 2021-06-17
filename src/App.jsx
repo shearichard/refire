@@ -1,14 +1,125 @@
-import React from 'react'
-import Firebase from 'firebase';
-import config from '../config';
+import React, { useContext, useState, useEffect } from 'react'
+import Firebase from './firebase';
+import { FirebaseContext, useFirebase } from "./firebase-context";
+
+
+function App() {
+    return (
+        <FirebaseContext.Provider value={new Firebase()}>
+            <Developers />
+        </FirebaseContext.Provider>
+    );
+};
+//
+/*type Developer = {
+    uid: string;
+    name: string;
+    role: string;
+};
+*/
+//
+function Developers() {
+    const firebase = useFirebase();
+    const [dynamicdevs, setDevelopers] = useState([]);
+    const arr = [1, 2, 3];
+    const arrobj = [
+        {id:10,name:'fred'},
+        {id:11,name:'mary'},
+        {id:12,name:'phil'},
+    ];
+    const devs = [
+        {uid:10,name:'fred', role:'r1'},
+        {uid:11,name:'mary', role:'r2'},
+        {uid:12,name:'phil', role:'r3'},
+    ];
+    //const setDevelopers(arr => [...arr,`
+    //
+//    useEffectHIDE(() => {
+//        /*
+//        firebase.database().ref(`developers`).on('value').then((snapshot) => {
+//            setDevelopers(snapshot.value());
+//        });
+//        */
+//        let dvlprRef = firebase.database().ref(`developers`);
+//        dvlprRef.on("value", (snapshot) => {
+//            const the_data = snapshot.val();
+//            let the_data_tweaked = [];
+//            console.log(the_data);
+//            Object.entries(the_data).map(item => {
+//                item[1].id = item[1].uid;
+//                item[1].key = item[1].uid;
+//                the_data_tweaked.push(item[1])
+//            })
+//            console.log("A");
+//            console.log(the_data_tweaked);
+//            console.log("B");
+//            setDevelopers(dynamicdevs => [...dynamicdevs, the_data_tweaked])
+//            console.log(dynamicdevs);
+//            console.log("C");
+//            //setDevelopers(data);
+//            //setDevelopers(snapshot.val());
+//        });
+//    }, [firebase]);
+    useEffect(() => {
+        let dvlprRef = firebase.database().ref(`developers`);
+        dvlprRef.on("value", (snapshot) => {
+            console.log("useEffect START")
+            console.log(snapshot.val())
+            console.log("1")
+            let x = snapshot.val()
+            console.log("2")
+            console.log(typeof(x))
+            console.log("3")
+            console.log(x[1])
+            console.log("4")
+            console.log(typeof(x[1]))
+            console.log("5")
+            console.log("useEffect STOP")
+            setDevelopers([])
+            Object.entries(x).map(item => {
+                console.log(item[1]);
+                setDevelopers(dynamicdevs => [...dynamicdevs, item[1]])
+                //item[1].id = item[1].uid;
+                //item[1].key = item[1].uid;
+                //the_data_tweaked.push(item[1])
+                //setDevelopers(dynamicdevs => [...dynamicdevs, the_data_tweaked])
+            })
+            console.log(dynamicdevs);
+            //setDevelopers(snapshot.val());
+        });
+    }, [firebase]);
+    //
+    const listItems = dynamicdevs.map((d) => 
+        <div key={d.uid}>{d.name}</div>
+    );
+                
+    return (
+        <div>
+            <p>Developers 2:</p> 
+            <div>
+            {listItems}
+            </div>
+        </div>
+    )
+}
+            //<p>Developers 1:</p> 
+             //   {arrobj.map((num) => (
+              //      <div key={num.id}>{num.name}</div>
+               // ))}
+            //{devs.map((d) => (
+             //   <div key={d.uid}>{d.name}</div>
+            //))}
+export default App;
 
 
 
+
+/*
 class App extends React.Component {
     //
     writeUserData = () => {
         Firebase.database()
-            .ref("/")
+            .dvlprRef("/")
             .set(this.state);
         console.log("DATA SAVED");
     };
@@ -172,3 +283,4 @@ class App extends React.Component {
   }
 }
 export default App
+*/
